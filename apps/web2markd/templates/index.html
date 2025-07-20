@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>web2markd - Web to Markdown Converter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🌐 web2markd</h1>
+            <p class="subtitle">WebサイトをMarkdownに変換して効率的に保存</p>
+        </header>
+
+        <main class="main-content">
+            <!-- URL入力セクション -->
+            <section class="url-section">
+                <div class="input-group">
+                    <input type="url" id="url-input" placeholder="https://example.com" class="url-input">
+                    <button id="crawl-btn" class="btn btn-primary">🕷️ クロール開始</button>
+                </div>
+                
+                <!-- フィルター設定 -->
+                <div class="filter-section">
+                    <h3>📋 フィルター設定</h3>
+                    <div class="filter-options">
+                        <div class="filter-group">
+                            <label>
+                                <input type="checkbox" id="remove-ads" checked>
+                                広告・ナビゲーション・サイドバーを除去
+                            </label>
+                        </div>
+                        <div class="filter-group">
+                            <label for="remove-selectors">除去するCSS選択子 (カンマ区切り):</label>
+                            <input type="text" id="remove-selectors" placeholder=".advertisement, .social-share, #sidebar" class="filter-input">
+                        </div>
+                        <div class="filter-group">
+                            <label for="keep-selectors">保持するCSS選択子 (カンマ区切り):</label>
+                            <input type="text" id="keep-selectors" placeholder="article, .content, main" class="filter-input">
+                        </div>
+                        <div class="filter-group">
+                            <label for="remove-tags">除去するHTMLタグ (カンマ区切り):</label>
+                            <input type="text" id="remove-tags" placeholder="script, style, iframe" class="filter-input">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ステータス表示 -->
+            <section class="status-section">
+                <div id="status-message" class="status-message"></div>
+                <div id="loading" class="loading hidden">
+                    <div class="spinner"></div>
+                    <span>クロール中...</span>
+                </div>
+            </section>
+
+            <!-- プレビュー・保存セクション -->
+            <section class="content-section hidden" id="content-section">
+                <div class="content-header">
+                    <h3 id="content-title">抽出されたコンテンツ</h3>
+                    <div class="content-info">
+                        <span id="content-length"></span>
+                        <span id="content-url"></span>
+                    </div>
+                </div>
+                
+                <div class="content-tabs">
+                    <button class="tab-btn active" data-tab="preview">📖 プレビュー</button>
+                    <button class="tab-btn" data-tab="markdown">📝 Markdown</button>
+                </div>
+                
+                <div class="tab-content">
+                    <div id="preview-tab" class="tab-pane active">
+                        <div id="content-preview" class="content-preview"></div>
+                    </div>
+                    <div id="markdown-tab" class="tab-pane">
+                        <textarea id="markdown-content" class="markdown-textarea"></textarea>
+                    </div>
+                </div>
+                
+                <div class="save-section">
+                    <div class="save-controls">
+                        <input type="text" id="filename-input" placeholder="ファイル名 (省略時は自動生成)" class="filename-input">
+                        <button id="save-btn" class="btn btn-success">💾 保存</button>
+                        <button id="download-btn" class="btn btn-secondary hidden">⬇️ ダウンロード</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 保存済みファイル一覧 -->
+            <section class="files-section">
+                <h3>📁 保存済みファイル</h3>
+                <div class="files-controls">
+                    <button id="refresh-files" class="btn btn-small">🔄 更新</button>
+                </div>
+                <div id="files-list" class="files-list">
+                    <!-- ファイル一覧がここに表示される -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
