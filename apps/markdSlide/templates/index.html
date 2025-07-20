@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>markdSlide - Markdown Presentation Tool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+</head>
+<body>
+    <div class="container" id="main-container">
+        <div class="header">
+            <h1>📊 markdSlide</h1>
+            <div class="controls">
+                <button id="save-btn" class="btn btn-secondary">💾 保存</button>
+                <button id="load-btn" class="btn btn-secondary">📁 読み込み</button>
+                <button id="start-presentation" class="btn btn-primary">🎬 プレゼン開始</button>
+            </div>
+        </div>
+        
+        <div class="editor-container">
+            <div class="editor-panel">
+                <h3>📝 Markdown エディター</h3>
+                <textarea id="markdown-input" placeholder="Markdownを入力してください...">{{ sample_markdown }}</textarea>
+                <div class="editor-info">
+                    <small>💡 ヒント: `---` でスライドを区切り、`<!-- timing: 秒数 -->` で時間を設定</small>
+                </div>
+            </div>
+            
+            <div class="preview-panel">
+                <h3>👀 プレビュー</h3>
+                <div id="preview-area" class="preview-content"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Presentation Mode -->
+    <div class="presentation-mode" id="presentation-mode" style="display: none;">
+        <div class="presentation-header">
+            <div class="slide-counter">
+                <span id="current-slide">1</span> / <span id="total-slides">1</span>
+            </div>
+            <div class="timer-container">
+                <div class="timer" id="timer">1分0秒</div>
+            </div>
+            <div class="presentation-controls">
+                <button id="exit-presentation" class="btn btn-small">✕ 終了</button>
+                <button id="toggle-fullscreen" class="btn btn-small">🔍 全画面</button>
+            </div>
+        </div>
+        
+        <div class="slide-container" id="slide-container">
+            <div class="slide-content" id="slide-content"></div>
+        </div>
+        
+        <div class="navigation">
+            <button id="prev-slide" class="nav-btn">‹ 前へ</button>
+            <button id="next-slide" class="nav-btn">次へ ›</button>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+    </div>
+    
+    <!-- File Input (Hidden) -->
+    <input type="file" id="file-input" accept=".md" style="display: none;">
+    
+    <!-- Audio for transitions -->
+    <audio id="slide-sound" preload="auto">
+        <source src="{{ url_for('static', filename='sounds/slide.mp3') }}" type="audio/mpeg">
+    </audio>
+    
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
