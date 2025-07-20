@@ -10,6 +10,74 @@ body {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: #333;
     line-height: 1.6;
+    transition: all 0.3s ease;
+}
+
+/* Dark Theme */
+body.dark-theme {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: #ecf0f1;
+}
+
+body.dark-theme .header {
+    background: rgba(44, 62, 80, 0.9);
+}
+
+body.dark-theme .header h1 {
+    color: #ecf0f1;
+}
+
+body.dark-theme .editor-panel,
+body.dark-theme .preview-panel {
+    background: rgba(44, 62, 80, 0.9);
+}
+
+body.dark-theme .editor-panel h3,
+body.dark-theme .preview-panel h3 {
+    color: #ecf0f1;
+}
+
+body.dark-theme #markdown-input {
+    background: #34495e;
+    color: #ecf0f1;
+    border-color: #5a6c7d;
+}
+
+body.dark-theme #markdown-input:focus {
+    border-color: #3498db;
+}
+
+body.dark-theme .preview-content {
+    background: #34495e;
+    color: #ecf0f1;
+    border-color: #5a6c7d;
+}
+
+body.dark-theme .editor-info {
+    color: #bdc3c7;
+}
+
+body.dark-theme .slide-content {
+    background: rgba(44, 62, 80, 0.95);
+    color: #ecf0f1;
+}
+
+body.dark-theme .slide-content h1 {
+    color: #ecf0f1;
+    border-bottom-color: #3498db;
+}
+
+body.dark-theme .slide-content h2 {
+    color: #bdc3c7;
+}
+
+body.dark-theme .slide-content h3 {
+    color: #3498db;
+}
+
+body.dark-theme .slide-content code {
+    background: #5a6c7d;
+    color: #e74c3c;
 }
 
 /* Container */
@@ -79,6 +147,28 @@ body {
 .btn-secondary:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(116, 185, 255, 0.4);
+}
+
+.btn-theme {
+    background: linear-gradient(45deg, #6c5ce7, #a29bfe);
+    color: white;
+    box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+}
+
+.btn-theme:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(108, 92, 231, 0.4);
+}
+
+.btn-export {
+    background: linear-gradient(45deg, #00b894, #00cec9);
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
+}
+
+.btn-export:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 184, 148, 0.4);
 }
 
 .btn-small {

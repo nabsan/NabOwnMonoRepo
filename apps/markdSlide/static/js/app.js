@@ -21,6 +21,8 @@ class MarkdSlideApp {
         this.saveBtn = document.getElementById('save-btn');
         this.loadBtn = document.getElementById('load-btn');
         this.fileInput = document.getElementById('file-input');
+        this.themeToggle = document.getElementById('theme-toggle');
+        this.exportPdfBtn = document.getElementById('export-pdf');
         
         // Presentation elements
         this.presentationMode = document.getElementById('presentation-mode');
@@ -47,6 +49,8 @@ class MarkdSlideApp {
         this.saveBtn.addEventListener('click', () => this.saveFile());
         this.loadBtn.addEventListener('click', () => this.loadFile());
         this.fileInput.addEventListener('change', (e) => this.handleFileLoad(e));
+        this.themeToggle.addEventListener('click', () => this.toggleTheme());
+        this.exportPdfBtn.addEventListener('click', () => this.exportToPDF());
         
         // Presentation events
         this.exitBtn.addEventListener('click', () => this.exitPresentation());
@@ -66,6 +70,7 @@ class MarkdSlideApp {
     }
     
     loadInitialContent() {
+        this.loadThemePreference();
         this.updatePreview();
     }
     
@@ -360,6 +365,58 @@ class MarkdSlideApp {
         
         // Reset file input
         event.target.value = '';
+    }
+    
+    toggleTheme() {
+        document.body.classList.toggle('dark-theme');
+        const isDark = document.body.classList.contains('dark-theme');
+        this.themeToggle.textContent = isDark ? '☀️ ライトモード' : '🌙 ダークモード';
+        
+        // Save theme preference
+        localStorage.setItem('darkTheme', isDark);
+    }
+    
+    loadThemePreference() {
+        const isDark = localStorage.getItem('darkTheme') === 'true';
+        if (isDark) {
+            document.body.classList.add('dark-theme');
+            this.themeToggle.textContent = '☀️ ライトモード';
+        }
+    }
+    
+    async exportToPDF() {
+        if (this.slides.length === 0) {
+            alert('スライドがありません。まずMarkdownを入力してください。');
+            return;
+        }
+        
+        try {
+            const response = await fetch('/export_pdf', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ slides: this.slides })
+            });
+            
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'slides.pdf';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+                alert('PDFをダウンロードしました。');
+            } else {
+                alert('PDF出力に失敗しました。');
+            }
+        } catch (error) {
+            console.error('Error exporting PDF:', error);
+            alert('PDF出力中にエラーが発生しました。');
+        }
     }
 }
 
