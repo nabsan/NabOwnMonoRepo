@@ -1,0 +1,17 @@
+# Core MCP and Gradio dependencies
+gradio==5.34.0
+mcp==1.9.4
+python-dotenv==1.1.0
+
+# HTTP client for Ollama and Qdrant
+requests>=2.31.0
+
+# System monitoring for OS info server
+psutil>=5.9.0
+
+# Optional: Additional utilities
+typing-extensions>=4.0.0
+
+# RAG and Vector Database
+# Note: Using requests for HTTP API calls to Qdrant instead of qdrant-client
+# to keep dependencies lightweight
