@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>slack2cal - Slack to Google Calendar Integration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>📅 slack2cal</h1>
+            <p class="subtitle">Slack画像からGoogle Calendarへの自動連携</p>
+        </header>
+
+        <nav class="navigation">
+            <a href="/" class="nav-link active">ダッシュボード</a>
+            <a href="/config" class="nav-link">設定</a>
+        </nav>
+
+        <main class="main-content">
+            <!-- Status Section -->
+            <section class="status-section">
+                <h2>📊 システム状態</h2>
+                <div class="status-grid">
+                    <div class="status-card">
+                        <div class="status-icon">🤖</div>
+                        <h3>Slack連携</h3>
+                        <div class="status-indicator" id="slack-status">未接続</div>
+                        <button id="test-slack" class="btn btn-small">テスト</button>
+                    </div>
+                    
+                    <div class="status-card">
+                        <div class="status-icon">📅</div>
+                        <h3>Google Calendar</h3>
+                        <div class="status-indicator" id="calendar-status">未接続</div>
+                        <button id="test-calendar" class="btn btn-small">テスト</button>
+                    </div>
+                    
+                    <div class="status-card">
+                        <div class="status-icon">👁️</div>
+                        <h3>OCR機能</h3>
+                        <div class="status-indicator" id="ocr-status">未確認</div>
+                        <button id="test-ocr" class="btn btn-small">テスト</button>
+                    </div>
+                    
+                    <div class="status-card">
+                        <div class="status-icon">🔄</div>
+                        <h3>監視状態</h3>
+                        <div class="status-indicator" id="monitoring-status">停止中</div>
+                        <button id="start-monitoring" class="btn btn-primary">監視開始</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Current Configuration -->
+            <section class="config-overview">
+                <h2>⚙️ 現在の設定</h2>
+                <div class="config-grid">
+                    <div class="config-item">
+                        <label>Slackワークスペース:</label>
+                        <span id="workspace-name">{{ config.slack.workspace_name }}</span>
+                    </div>
+                    <div class="config-item">
+                        <label>監視チャンネル:</label>
+                        <span id="channel-name">#{{ config.slack.channel_name }}</span>
+                    </div>
+                    <div class="config-item">
+                        <label>カレンダーID:</label>
+                        <span id="calendar-id">{{ config.google_calendar.calendar_id }}</span>
+                    </div>
+                    <div class="config-item">
+                        <label>OCR言語:</label>
+                        <span id="ocr-language">{{ config.ocr.language }}</span>
+                    </div>
+                </div>
+                <a href="/config" class="btn btn-secondary">設定を編集</a>
+            </section>
+
+            <!-- OCR Test Section -->
+            <section class="test-section">
+                <h2>🔍 OCRテスト</h2>
+                <div class="test-content">
+                    <div class="upload-area">
+                        <input type="file" id="ocr-file-input" accept="image/*" hidden>
+                        <div class="upload-drop-zone" id="upload-drop-zone">
+                            <div class="upload-icon">📷</div>
+                            <p>画像をドラッグ&ドロップまたはクリックして選択</p>
+                            <p class="upload-hint">日付が含まれた画像をアップロードしてOCRをテストできます</p>
+                        </div>
+                    </div>
+                    
+                    <div class="test-results hidden" id="ocr-results">
+                        <h3>OCR結果</h3>
+                        <div class="result-item">
+                            <label>抽出されたテキスト:</label>
+                            <pre id="extracted-text"></pre>
+                        </div>
+                        <div class="result-item">
+                            <label>検出された日付:</label>
+                            <div id="found-dates"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activity Log -->
+            <section class="log-section">
+                <h2>📝 活動ログ</h2>
+                <div class="log-container">
+                    <div id="activity-log" class="log-content">
+                        <div class="log-entry info">
+                            <span class="log-time">10:58:38</span>
+                            <span class="log-message">slack2calアプリが起動しました</span>
+                        </div>
+                    </div>
+                    <button id="clear-log" class="btn btn-small">ログクリア</button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Status Messages -->
+        <div id="status-message" class="status-message hidden"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

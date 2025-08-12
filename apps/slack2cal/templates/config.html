@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>設定 - slack2cal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>⚙️ slack2cal 設定</h1>
+            <p class="subtitle">アプリケーションの設定を管理</p>
+        </header>
+
+        <nav class="navigation">
+            <a href="/" class="nav-link">ダッシュボード</a>
+            <a href="/config" class="nav-link active">設定</a>
+        </nav>
+
+        <main class="main-content">
+            <form id="config-form" class="config-form">
+                <!-- Slack Settings -->
+                <section class="config-section">
+                    <h2>🤖 Slack設定</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="workspace-name">ワークスペース名</label>
+                            <input type="text" id="workspace-name" name="slack.workspace_name" 
+                                   value="{{ config.slack.workspace_name }}" placeholder="myown">
+                            <small>Slackワークスペースの名前</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="channel-name">チャンネル名</label>
+                            <input type="text" id="channel-name" name="slack.channel_name" 
+                                   value="{{ config.slack.channel_name }}" placeholder="calendar">
+                            <small>監視するチャンネル名（#は不要）</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bot-token">Bot Token</label>
+                            <input type="password" id="bot-token" name="slack.bot_token" 
+                                   value="{{ config.slack.bot_token }}" placeholder="xoxb-...">
+                            <small>SlackアプリのBot User OAuth Token</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="app-token">App Token</label>
+                            <input type="password" id="app-token" name="slack.app_token" 
+                                   value="{{ config.slack.app_token }}" placeholder="xapp-...">
+                            <small>Socket Mode用のApp-Level Token（オプション）</small>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Google Calendar Settings -->
+                <section class="config-section">
+                    <h2>📅 Google Calendar設定</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="calendar-id">カレンダーID</label>
+                            <input type="text" id="calendar-id" name="google_calendar.calendar_id" 
+                                   value="{{ config.google_calendar.calendar_id }}" placeholder="primary">
+                            <small>メインカレンダーは"primary"、他のカレンダーはIDを指定</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="credentials-file">認証情報ファイル</label>
+                            <input type="text" id="credentials-file" name="google_calendar.credentials_file" 
+                                   value="{{ config.google_calendar.credentials_file }}" readonly>
+                            <small>Google APIの認証情報JSONファイルのパス</small>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- OCR Settings -->
+                <section class="config-section">
+                    <h2>👁️ OCR設定</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="ocr-language">認識言語</label>
+                            <select id="ocr-language" name="ocr.language">
+                                <option value="jpn+eng" {{ 'selected' if config.ocr.language == 'jpn+eng' else '' }}>日本語+英語</option>
+                                <option value="jpn" {{ 'selected' if config.ocr.language == 'jpn' else '' }}>日本語のみ</option>
+                                <option value="eng" {{ 'selected' if config.ocr.language == 'eng' else '' }}>英語のみ</option>
+                            </select>
+                            <small>OCRで認識する言語</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>日付パターン</label>
+                            <div class="date-patterns">
+                                {% for pattern in config.ocr.date_patterns %}
+                                <div class="pattern-item">
+                                    <input type="text" value="{{ pattern }}" class="pattern-input">
+                                    <button type="button" class="btn btn-small remove-pattern">削除</button>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <button type="button" id="add-pattern" class="btn btn-small">パターン追加</button>
+                            <small>日付認識のパターン（Python strftimeフォーマット）</small>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Event Settings -->
+                <section class="config-section">
+                    <h2>📝 イベント設定</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="default-title">デフォルトタイトル</label>
+                            <input type="text" id="default-title" name="event.default_title" 
+                                   value="{{ config.event.default_title }}" placeholder="スケジュール">
+                            <small>カレンダーイベントのデフォルトタイトル</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="default-time">デフォルト時刻</label>
+                            <input type="time" id="default-time" name="event.default_time" 
+                                   value="{{ config.event.default_time }}">
+                            <small>時刻が指定されていない場合のデフォルト開始時刻</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="default-duration">デフォルト期間（時間）</label>
+                            <input type="number" id="default-duration" name="event.default_duration_hours" 
+                                   value="{{ config.event.default_duration_hours }}" min="0.5" max="24" step="0.5">
+                            <small>イベントのデフォルト期間</small>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- App Settings -->
+                <section class="config-section">
+                    <h2>🔧 アプリケーション設定</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="app-port">ポート番号</label>
+                            <input type="number" id="app-port" name="app.port" 
+                                   value="{{ config.app.port }}" min="1000" max="65535">
+                            <small>Webアプリケーションのポート番号</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="log-level">ログレベル</label>
+                            <select id="log-level" name="app.log_level">
+                                <option value="DEBUG" {{ 'selected' if config.app.log_level == 'DEBUG' else '' }}>DEBUG</option>
+                                <option value="INFO" {{ 'selected' if config.app.log_level == 'INFO' else '' }}>INFO</option>
+                                <option value="WARNING" {{ 'selected' if config.app.log_level == 'WARNING' else '' }}>WARNING</option>
+                                <option value="ERROR" {{ 'selected' if config.app.log_level == 'ERROR' else '' }}>ERROR</option>
+                            </select>
+                            <small>ログの詳細レベル</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="image-timeout">画像ダウンロードタイムアウト（秒）</label>
+                            <input type="number" id="image-timeout" name="app.image_download_timeout" 
+                                   value="{{ config.app.image_download_timeout }}" min="5" max="300">
+                            <small>Slackから画像をダウンロードする際のタイムアウト</small>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Action Buttons -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">💾 設定を保存</button>
+                    <button type="button" id="reset-config" class="btn btn-secondary">🔄 リセット</button>
+                    <a href="/" class="btn btn-outline">← ダッシュボードに戻る</a>
+                </div>
+            </form>
+        </main>
+
+        <!-- Status Messages -->
+        <div id="status-message" class="status-message hidden"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/config.js') }}"></script>
+</body>
+</html>
