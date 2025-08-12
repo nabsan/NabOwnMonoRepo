@@ -305,25 +305,49 @@ class GoogleCalendarManager:
         if not credentials_file:
             raise Exception("Google Calendar credentials file path not configured")
         
+        # デフォルトのtoken_fileパスを設定（設定されていない場合）
+        if not token_file:
+            token_file = 'config/google_token.json'
+            self.config.set('google_calendar.token_file', token_file)
+            logger.info(f"Token file path not configured, using default: {token_file}")
+        
         # Load existing token
         if token_file and os.path.exists(token_file):
-            creds = Credentials.from_authorized_user_file(token_file, self.scopes)
+            try:
+                creds = Credentials.from_authorized_user_file(token_file, self.scopes)
+                logger.info(f"Loaded existing credentials from {token_file}")
+            except Exception as e:
+                logger.warning(f"Error loading existing token: {e}")
+                creds = None
         
         # If no valid credentials, run OAuth flow
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
-            else:
+                try:
+                    creds.refresh(Request())
+                    logger.info("Refreshed expired credentials")
+                except Exception as e:
+                    logger.warning(f"Error refreshing credentials: {e}")
+                    creds = None
+            
+            if not creds:
                 if not os.path.exists(credentials_file):
                     raise Exception(f"Google credentials file not found: {credentials_file}")
                 
+                logger.info("Starting OAuth flow...")
                 flow = InstalledAppFlow.from_client_secrets_file(credentials_file, self.scopes)
                 creds = flow.run_local_server(port=0)
+                logger.info("OAuth flow completed successfully")
             
             # Save credentials
-            os.makedirs(os.path.dirname(token_file), exist_ok=True)
-            with open(token_file, 'w') as token:
-                token.write(creds.to_json())
+            try:
+                os.makedirs(os.path.dirname(token_file), exist_ok=True)
+                with open(token_file, 'w') as token:
+                    token.write(creds.to_json())
+                logger.info(f"Saved credentials to {token_file}")
+            except Exception as e:
+                logger.error(f"Error saving credentials: {e}")
+                # Continue without saving - authentication still works for this session
         
         self.service = build('calendar', 'v3', credentials=creds)
         logger.info("Google Calendar authentication successful")
