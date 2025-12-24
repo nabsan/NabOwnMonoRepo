@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  mcp-server-own:
+    image: nab/mcp-server-own:latest
+    container_name: mcp-server-own
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    restart: always
+
