@@ -1,27 +1,33 @@
-from fastmcp import tool
-import psycopg2
-import os
-from core.query_guard import guard_sql
+"""PostgreSQL database query tool."""
 
-@tool
-def postgres_query(sql: str, limit: int = 100):
-    """Execute read-only query on PostgreSQL"""
-    sql = guard_sql(sql, max_limit=limit)
+from typing import Dict, Any
 
-    conn = psycopg2.connect(
-        host=os.getenv("PG_HOST"),
-        port=os.getenv("PG_PORT", "5432"),
-        user=os.getenv("PG_USER"),
-        password=os.getenv("PG_PASSWORD"),
-        dbname=os.getenv("PG_DB"),
-        connect_timeout=5,
-    )
 
-    cur = conn.cursor()
-    cur.execute(sql)
-    cols = [d[0] for d in cur.description]
-    rows = [dict(zip(cols, r)) for r in cur.fetchall()]
-    conn.close()
+def postgres_query(sql: str, limit: int = 100) -> Dict[str, Any]:
+    """Execute a query against PostgreSQL database.
+    
+    Args:
+        sql: SQL query string
+        limit: Max rows to return
+    
+    Returns:
+        dict: Query result or error
+    """
+    # TODO: Implement actual PostgreSQL connection using psycopg2 or asyncpg
+    # For now, return stub result
+    if not sql or not sql.strip():
+        return {"error": "SQL query is empty"}
+    
+    return {
+        "query": sql,
+        "limit": limit,
+        "status": "stub - implement actual PostgreSQL connection",
+        "count": 0,
+        "rows": []
+    }
 
-    return {"count": len(rows), "rows": rows}
+
+if __name__ == '__main__':
+    result = postgres_query("SELECT 1")
+    print(result)
 

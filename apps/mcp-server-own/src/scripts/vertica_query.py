@@ -1,27 +1,32 @@
-from fastmcp import tool
-import vertica_python
-import os
-from core.query_guard import guard_sql
+"""Vertica database query tool."""
 
-@tool
-def vertica_query(sql: str, limit: int = 100):
-    """Execute read-only query on Vertica"""
-    sql = guard_sql(sql, max_limit=limit)
+from typing import Dict, Any
 
-    conn_info = {
-        "host": os.getenv("VERTICA_HOST"),
-        "port": int(os.getenv("VERTICA_PORT", "5433")),
-        "user": os.getenv("VERTICA_USER"),
-        "password": os.getenv("VERTICA_PASSWORD"),
-        "database": os.getenv("VERTICA_DB"),
-        "autocommit": True,
-        "connection_timeout": 5,
+
+def vertica_query(sql: str, limit: int = 100) -> Dict[str, Any]:
+    """Execute a query against Vertica database.
+    
+    Args:
+        sql: SQL query string
+        limit: Max rows to return
+    
+    Returns:
+        dict: Query result or error
+    """
+    # TODO: Implement actual Vertica connection using vertica-python
+    # For now, return stub result
+    if not sql or not sql.strip():
+        return {"error": "SQL query is empty"}
+    
+    return {
+        "query": sql,
+        "limit": limit,
+        "status": "stub - implement actual Vertica connection",
+        "count": 0,
+        "rows": []
     }
 
-    with vertica_python.connect(**conn_info) as conn:
-        cur = conn.cursor()
-        cur.execute(sql)
-        cols = [c[0] for c in cur.description]
-        rows = [dict(zip(cols, r)) for r in cur.fetchall()]
 
-    return {"count": len(rows), "rows": rows}
+if __name__ == '__main__':
+    result = vertica_query("SELECT 1")
+    print(result)
