@@ -32,7 +32,7 @@ English Flashrace は、１秒以内に単語を理解できるかを測るタ�
    
    .env の内容例:
    ```
-   USERS=nab:nab00x,user1:password1,user2:password2
+   USERS=user:xxx,user1:password1,user2:password2
    SECRET_KEY=change-me-long-random
    SKIP_PENALTY_SECONDS=2.0
    RESULTS_DIR=data
