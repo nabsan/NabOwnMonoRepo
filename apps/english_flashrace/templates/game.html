@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+body {
+  font-family: 'Arial', 'Segoe UI', sans-serif;
+  padding: 20px;
+}
+h2 {
+  font-size: 28px;
+}
+#progress {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #666;
+}
+#word {
+  font-size: 56px;
+  font-weight: bold;
+  margin: 40px 0;
+  min-height: 80px;
+}
+#reading {
+  font-size: 28px;
+  color: #0066cc;
+  margin: 20px 0;
+  min-height: 40px;
+}
+#meaning {
+  font-size: 24px;
+  color: #333;
+  margin: 20px 0;
+  min-height: 40px;
+}
+#buttons {
+  margin-top: 60px;
+}
+button {
+  font-size: 20px;
+  padding: 15px 40px;
+  margin: 0 15px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: #4CAF50;
+  color: white;
+}
+button:hover {
+  background-color: #45a049;
+}
+</style>
+</head>
+<body>
+<h2>{{ name }}</h2>
+<div id="progress"></div>
+<div id="word"></div>
+<div id="reading"></div>
+<div id="meaning"></div>
+<div id="buttons">
+  <button onclick="knowWord()">知ってる</button>
+  <button onclick="dontKnow()">知らない</button>
+</div>
+<script>
+let i=0, words=[], results=[];
+let startTime = 0;
+fetch("/api/words/{{ name }}").then(r=>r.json()).then(d=>{words=d;show();});
+function show(){
+  document.getElementById("progress").innerText=`${i+1}/${words.length}`;
+  document.getElementById("word").innerText=words[i].word;
+  document.getElementById("reading").innerText="";
+  document.getElementById("meaning").innerText="";
+  // 計測開始
+  startTime = performance.now();
+}
+function recordAnswer(ans){
+  const elapsedMs = Math.round(performance.now() - startTime);
+  results.push({word: words[i].word, answer: ans, time_ms: elapsedMs});
+  document.getElementById("reading").innerText=words[i].reading;
+  document.getElementById("meaning").innerText=words[i].meaning;
+  i++;
+  if(i >= words.length) {
+    setTimeout(()=>{document.getElementById("buttons").innerHTML = '<button onclick="finish()">finish</button>';}, 1000);
+  } else {
+    setTimeout(show, 1000);
+  }
+}
+function knowWord(){ recordAnswer("知ってる"); }
+function dontKnow(){ recordAnswer("知らない"); }
+function finish(){
+  const totalMs = results.reduce((s,r)=>s + (r.time_ms||0), 0);
+  fetch("/api/results", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({list: "{{ name }}", results: results, total_time_ms: totalMs})
+  }).then(r=>r.json()).then(d=>{
+    window.location.href="/results/" + d.id;
+  });
+}
+</script>
+</body>
+</html>

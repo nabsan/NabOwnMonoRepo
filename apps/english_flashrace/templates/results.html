@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+body {
+  font-family: 'Arial', 'Segoe UI', sans-serif;
+  padding: 20px;
+}
+h2 {
+  font-size: 28px;
+}
+.stats {
+  font-size: 20px;
+  margin: 20px 0;
+}
+.stat-item {
+  margin: 10px 0;
+}
+.know {
+  color: #4CAF50;
+  font-weight: bold;
+}
+.dont-know {
+  color: #f44336;
+  font-weight: bold;
+}
+.results-list {
+  margin-top: 40px;
+}
+.result-item {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  font-size: 16px;
+}
+.result-item.know {
+  background-color: #f0f8f0;
+}
+.result-item.dont-know {
+  background-color: #fff0f0;
+}
+button {
+  font-size: 18px;
+  padding: 10px 30px;
+  margin-top: 20px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: #2196F3;
+  color: white;
+}
+button:hover {
+  background-color: #0b7dda;
+}
+</style>
+</head>
+<body>
+<h2>結果：{{ list_name }}</h2>
+
+<div class="stats">
+  <div class="stat-item">全問数：<strong>{{ total }}</strong></div>
+  <div class="stat-item"><span class="know">知ってる：{{ know }} 問</span></div>
+  <div class="stat-item"><span class="dont-know">知らない：{{ dont_know }} 問</span></div>
+  <div class="stat-item">正答率：<strong>{{ (know * 100 / total)|round(1) }}%</strong></div>
+  {% if total_time_seconds is not none %}
+  <div class="stat-item">合計時間：<strong>{{ total_time_seconds }} 秒</strong></div>
+  {% if total > 0 %}
+  <div class="stat-item">平均（秒/問）：<strong>{{ (total_time_seconds / total)|round(3) }} 秒/問</strong></div>
+  {% endif %}
+  {% endif %}
+</div>
+
+<div class="results-list">
+  <h3>詳細</h3>
+  {% for result in results %}
+  <div class="result-item {% if result.answer == '知ってる' %}know{% else %}dont-know{% endif %}">
+    {{ loop.index }}. {{ result.word }} - <span>{{ result.answer }}</span>
+  </div>
+  {% endfor %}
+</div>
+
+<button onclick="backHome()">トップに戻る</button>
+
+<script>
+function backHome(){
+  window.location.href="/";
+}
+</script>
+</body>
+</html>

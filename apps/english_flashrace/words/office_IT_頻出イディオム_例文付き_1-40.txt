@@ -1,0 +1,41 @@
+# IT Office 英語 頻出イディオム（例文付き）
+# 表現 | 発音 | 意味 | 例文
+follow up | フォローアップ | 追加対応する | I will follow up on this issue tomorrow.
+set up | セットアップ | 構築する | We need to set up a test environment.
+look into | ルックイントゥ | 調査する | I will look into the root cause.
+figure out | フィギュアアウト | 解決する | We need to figure out why it failed.
+work on | ワークオン | 取り組む | I am working on the bug fix.
+deal with | ディールウィズ | 対応する | We are dealing with a production issue.
+check out | チェックアウト | 確認する | Please check out the latest logs.
+bring up | ブリングアップ | 話題に出す | I will bring this up in the meeting.
+go over | ゴーオーバー | 確認する | Let’s go over the requirements.
+run into | ランイントゥ | 直面する | We ran into an unexpected error.
+move forward | ムーブフォワード | 前進する | Let’s move forward with this plan.
+wrap up | ラップアップ | まとめる | Let’s wrap up this discussion.
+hand over | ハンドオーバー | 引き継ぐ | I will hand over the task to you.
+get back to | ゲットバックトゥ | 返答する | I will get back to you shortly.
+keep track of | キープトラックオブ | 追跡する | We need to keep track of progress.
+catch up | キャッチアップ | 進捗共有する | Let’s catch up later today.
+come up with | カムアップウィズ | 思いつく | She came up with a good solution.
+sort out | ソートアウト | 解決する | We need to sort out this issue.
+set aside | セットアサイド | 後回しにする | Let’s set this aside for now.
+point out | ポイントアウト | 指摘する | He pointed out a potential risk.
+take care of | テイクケアオブ | 対応する | I will take care of the deployment.
+fall behind | フォールビハインド | 遅れる | We are falling behind schedule.
+catch up with | キャッチアップウィズ | 追いつく | We need to catch up with the plan.
+run out of | ランアウトオブ | 使い切る | We ran out of disk space.
+push back | プッシュバック | 延期する | The release was pushed back.
+kick off | キックオフ | 開始する | The project will kick off next week.
+spin up | スピンアップ | 立ち上げる | We spun up a new server.
+scale up | スケールアップ | 拡張する | We need to scale up the system.
+shut down | シャットダウン | 停止する | The service was shut down.
+phase out | フェーズアウト | 廃止する | This feature will be phased out.
+rule out | ルールアウト | 除外する | We can rule out a network issue.
+follow through | フォロースルー | やり切る | Please follow through on this task.
+touch base | タッチベース | 軽く連絡する | Let’s touch base tomorrow.
+reach out | リーチアウト | 連絡する | I will reach out to the vendor.
+on track | オントラック | 順調で | The project is on track.
+off track | オフトラック | 遅れて | We are off track due to delays.
+in place | インプレイス | 整っている | The process is already in place.
+on hold | オンホールド | 保留中 | This task is currently on hold.
+up to speed | アップトゥスピード | 把握して | I will get you up to speed.

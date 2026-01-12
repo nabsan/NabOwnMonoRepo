@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+body {
+  font-family: 'Arial', 'Segoe UI', sans-serif;
+  padding: 20px;
+}
+h2 {
+  font-size: 28px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 16px;
+}
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+th {
+  background-color: #2196F3;
+  color: white;
+  font-weight: bold;
+}
+tr:hover {
+  background-color: #f5f5f5;
+}
+.rank {
+  font-weight: bold;
+  width: 50px;
+}
+.rank.first {
+  color: #ffd700;
+  font-size: 18px;
+}
+.rank.second {
+  color: #c0c0c0;
+}
+.rank.third {
+  color: #cd7f32;
+}
+button {
+  font-size: 16px;
+  padding: 10px 30px;
+  margin-top: 20px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: #2196F3;
+  color: white;
+}
+button:hover {
+  background-color: #0b7dda;
+}
+.no-data {
+  font-size: 18px;
+  color: #999;
+  margin-top: 20px;
+}
+</style>
+</head>
+<body>
+<h2>🏆 ランキング Top 10</h2>
+
+{% if ranking %}
+<table>
+  <thead>
+    <tr>
+      <th>順位</th>
+      <th>ユーザー名</th>
+      <th>リスト</th>
+      <th>正答数/全問</th>
+      <th>記録（秒）</th>
+      <th>平均（秒/問）</th>
+      <th>記録日時</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in ranking %}
+    <tr>
+      <td class="rank {% if loop.index == 1 %}first{% elif loop.index == 2 %}second{% elif loop.index == 3 %}third{% endif %}">
+        {% if loop.index == 1 %}🥇{% elif loop.index == 2 %}🥈{% elif loop.index == 3 %}🥉{% else %}{{ loop.index }}{% endif %}
+      </td>
+      <td>{{ item.username }}</td>
+      <td>{{ item.list }}</td>
+      <td>{{ item.know }}/{{ item.total }}</td>
+      <td><strong>{{ item.total_time_sec }}s</strong></td>
+      <td>{% if item.avg_time_sec is not none %}{{ item.avg_time_sec }}s{% else %}-{% endif %}</td>
+      <td>{{ item.timestamp[:10] }} {{ item.timestamp[11:19] }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="no-data">まだランキング記録がありません</div>
+{% endif %}
+
+<button onclick="backHome()">トップに戻る</button>
+
+<script>
+function backHome(){
+  window.location.href="/";
+}
+</script>
+</body>
+</html>

@@ -60,3 +60,6 @@ yarn-error.log*
 # OS
 .DS_Store
 Thumbs.db
+
+apps/insta_diff_following/session.json
+apps/insta_diff_following/follow_analysis.json
